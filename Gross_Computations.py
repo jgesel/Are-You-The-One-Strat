@@ -9,7 +9,7 @@ from itertools import permutations
 import random
 
 all_perms = list(permutations(range(1, 8))) 
-true_perm = np.array([1, 2, 3, 4, 5, 6, 7])
+true_perm = np.array([2,1, 3, 4, 5, 6, 7])
 #test_ind = np.int(np.random.choice(len(all_perms), 1))
 
 
@@ -40,7 +40,20 @@ def Logic_Puzzle(true_permutation, submitted_permutation, remaining_permutations
     cleanedList = [x for x in work_perms if str(x) != 'nan']
     return(cleanedList)
 
-remaining_perms = Logic_Puzzle(true_perm, test_perm, all_perms)
-test_perm2 = remaining_perms[np.int(np.random.choice(len(remaining_perms), 1))]
-correct = Logic_Puzzle(true_perm, test_perm2, remaining_perms)
+#Recursively play multiple rounds (time2game)
+def Games_We_Play(true_permutation, submitted_permutation, remaining_permutations, rounds):
+    if(rounds == 1):
+        #submitted_perm = remaining_permutations[np.int(np.random.choice(len(remaining_permutations), 1))]
+        return(Logic_Puzzle(true_permutation, submitted_permutation, remaining_permutations))
+    else:
+        remaining_perms = Logic_Puzzle(true_permutation, submitted_permutation, remaining_permutations)
+        submitted_perm = remaining_perms[np.int(np.random.choice(len(remaining_perms), 1))]
+        return(Games_We_Play(true_permutation, submitted_perm, remaining_perms, rounds - 1))
+    
+test = Games_We_Play(true_perm, test_perm, all_perms, 5)
+#remaining_perms = Logic_Puzzle(true_perm, test_perm, all_perms)
+#test_perm2 = remaining_perms[np.int(np.random.choice(len(remaining_perms), 1))]
+#correct = Logic_Puzzle(true_perm, test_perm2, remaining_perms)
+        
+    
 #perms_left = all_perms[correct]
